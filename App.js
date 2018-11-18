@@ -116,7 +116,6 @@ export default class App extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={{ ...styles.text, height: 20, backgroundColor: 'steelblue'}}></Text>
         <Text style={{ ...styles.text, height: 60, fontWeight: 'bold', color: 'white', fontSize: 16, backgroundColor: 'steelblue'}}>rsstodolist - {config.server}</Text>
         <View style={{ ...styles.row }}>
           <TextInput
