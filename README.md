@@ -1,10 +1,10 @@
-# rsstodolist-react-native
+# rsstodolist
 rsstodolist in react natve
 
 ## intructions
 
 copy `config.json.dist` to `config.json` before build.
 
-Then  
+Then
  * ` npm start`
- * and `react-native run-android` in another terminal. 
+ * and `react-native run-android` in another terminal.

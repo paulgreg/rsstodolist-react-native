@@ -1,4 +1,4 @@
-package com.rsstodolistreactnative;
+package com.rsstodolist;
 
 import android.app.Application;
 

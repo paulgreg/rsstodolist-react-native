@@ -45,12 +45,12 @@ android_library(
 
 android_build_config(
     name = "build_config",
-    package = "com.rsstodolistreactnative",
+    package = "com.rsstodolist",
 )
 
 android_resource(
     name = "res",
-    package = "com.rsstodolistreactnative",
+    package = "com.rsstodolist",
     res = "src/main/res",
 )
 
