@@ -46,7 +46,7 @@ export default class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      items: []
+      url: this.props.url
     }
   }
 
@@ -151,6 +151,7 @@ export default class App extends React.Component {
             autoCapitalize="none"
             keyboardType="url"
             placeholder="URL"
+            value={this.state.url}
             onChangeText={(url) => this.setState({url})}
           />
         </View>
