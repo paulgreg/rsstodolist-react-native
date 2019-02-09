@@ -24,8 +24,13 @@ public class MainActivity extends ReactActivity {
         @Override
         protected Bundle getLaunchOptions() {
           Intent intent = MainActivity.this.getIntent();
+
           Bundle bundle = new Bundle();
-          bundle.putString("url", intent.getStringExtra(Intent.EXTRA_TEXT));
+          if (intent.getData() != null) {
+            bundle.putString("url", intent.getData().toString());
+          } else if (intent.getStringExtra(Intent.EXTRA_TEXT) != null) {
+            bundle.putString("url", intent.getStringExtra(Intent.EXTRA_TEXT));
+          }
           return bundle;
         }
       };
