@@ -7,14 +7,13 @@ import {
   Button,
   View,
   ActivityIndicator,
-  Keyboard,
-  TouchableOpacity,
-  AsyncStorage
+  Keyboard
 } from 'react-native'
 import * as rssParser from 'react-native-rss-parser'
-import FeedListView from './FeedListView'
-import renderIf from './renderIf'
-import AutoComplete from 'react-native-autocomplete-input'
+import FeedListView from './components/FeedListView'
+import renderIf from './components/renderIf'
+import FeedSuggestionsInput from './components/FeedSuggestionsInput'
+import Store from './components/Store'
 
 const height = 40
 
@@ -39,23 +38,9 @@ const styles = StyleSheet.create({
     borderStyle: 'dotted',
     borderBottomColor: '#CCC'
   },
-  autoComplete: {
-    height,
-    borderStyle: 'none',
-    borderBottomWidth: 1,
-    borderStyle: 'dotted',
-    borderBottomColor: '#CCC'
-  },
-  suggestion: {
-    fontSize: 15,
-    paddingTop: 5,
-    paddingBottom: 5,
-    margin: 2
-  },
   button: {
     height,
-    flex: 1,
-    justifyContent: 'center'
+    flex: 1
   },
   row: {
     padding: 4,
@@ -75,13 +60,6 @@ export default class App extends React.Component {
     }
   }
 
-  componentDidMount() {
-    AsyncStorage.getItem('@rsstodolist:feeds').then(result => {
-      const feeds = JSON.parse(result) || []
-      this.setState({ feeds })
-    })
-  }
-
   go() {
     if (!this.checkFeedName()) return
 
@@ -93,7 +71,7 @@ export default class App extends React.Component {
       loading: true
     })
 
-    const { feed, feeds } = this.state
+    const { feed } = this.state
     return fetch(`${config.server}?n=${feed}&l=100`)
       .then(response => response.text())
       .then(responseData => rssParser.parse(responseData))
@@ -106,16 +84,7 @@ export default class App extends React.Component {
           items,
           loading: undefined
         })
-      })
-      .then(() => {
-        if (feeds.indexOf(feed) === -1) {
-          const newFeeds = [...feeds, feed]
-          this.setState({ feeds: newFeeds })
-          return AsyncStorage.setItem(
-            '@rsstodolist:feeds',
-            JSON.stringify(newFeeds)
-          )
-        }
+        return Store.save(feed)
       })
       .catch(e => {
         this.setState({
@@ -138,7 +107,6 @@ export default class App extends React.Component {
 
     Keyboard.dismiss()
 
-    const { feeds } = this.state
     this.setState({
       msg: undefined,
       error: undefined,
@@ -159,13 +127,9 @@ export default class App extends React.Component {
       })
   }
 
-  getFeedsSuggestions(feeds, feed) {
-    console.log('getFeeds', feeds, feed)
-    return (feeds || []).filter(w => w !== feed && w.indexOf(feed) === 0)
-  }
-
   render() {
-    const { feed, feeds } = this.state
+    const { feed } = this.state
+    console.log('renderApp', feed)
     return (
       <View style={styles.container}>
         <Text
@@ -181,19 +145,9 @@ export default class App extends React.Component {
           rsstodolist - {config.server}
         </Text>
         <View style={{ ...styles.row }}>
-          <AutoComplete
-            style={{ ...styles.autoComplete }}
-            data={this.getFeedsSuggestions(feeds, feed)}
-            autoCapitalize="none"
-            autoFocus={true}
-            defaultValue={feed}
-            onChangeText={feed => this.setState({ feed: feed.toLowerCase() })}
-            placeholder="Feed name"
-            renderItem={item => (
-              <TouchableOpacity onPress={() => this.setState({ feed: item })}>
-                <Text style={{ ...styles.suggestion }}>{item}</Text>
-              </TouchableOpacity>
-            )}
+          <FeedSuggestionsInput
+            feed={feed}
+            onChangeText={feed => this.setState({ feed })}
           />
           <Button
             style={{ ...styles.button }}
