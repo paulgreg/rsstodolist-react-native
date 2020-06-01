@@ -103,7 +103,7 @@ export default class App extends React.Component {
       loading: true,
     })
 
-    return fetch(`${config.server}${action}}?n=${this.state.feed}&u=${this.state.url}`)
+    return fetch(`${config.server}${action}?n=${this.state.feed}&u=${this.state.url}`)
     .then(() => {
       this.showMessage(`URL ${verb} to feed ${this.state.feed}`)
       this.go()
