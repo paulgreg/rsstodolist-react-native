@@ -6,5 +6,5 @@ rsstodolist in react natve
 copy `config.json.dist` to `config.json` before build.
 
 Then
- * ` npm start`
+ * `npm start`
  * and `react-native run-android` in another terminal.
